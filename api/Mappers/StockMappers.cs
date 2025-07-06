@@ -18,11 +18,10 @@ namespace api.Mappers
                 MarketCap = stockModel.MarketCap
             };
         }
-        public static Stock ToModel(this StockDto stockDto)
+        public static Stock ToStockFromRequest(this StockRequestDto stockDto)
         {
             return new Stock
             {
-                Id = stockDto.Id,
                 Symbol = stockDto.Symbol,
                 CompanyName = stockDto.CompanyName,
                 Purchase = stockDto.Purchase,
