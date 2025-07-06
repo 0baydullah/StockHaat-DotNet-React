@@ -18,7 +18,7 @@ namespace api.Mappers
                 MarketCap = stockModel.MarketCap
             };
         }
-        public static Stock ToStockFromRequest(this StockRequestDto stockDto)
+        public static Stock ToStockFromRequest(this StockCreateDto stockDto)
         {
             return new Stock
             {
