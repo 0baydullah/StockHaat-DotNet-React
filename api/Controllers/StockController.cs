@@ -74,5 +74,24 @@ namespace api.Controllers
 
             return Ok(stock.ToDto());
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var stock = _context.Stocks.FirstOrDefault(x => x.Id == id);
+
+            if(stock == null)
+            {
+                return NotFound($"Stock with id {id} isn't found that u are trying to delete");
+            }
+
+            _context.Remove(stock);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
