@@ -42,9 +42,21 @@ namespace api.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Comment?> UpdateAsync(int id, CommentDto commentDto)
+        public async Task<Comment?> UpdateAsync(int id, CommentUpdateDto commentDto)
         {
-            throw new NotImplementedException();
+            var existingComment = await _context.Comments.FindAsync(id);
+
+            if (existingComment == null)
+            {
+                return null;
+            }
+
+            existingComment.Title = commentDto.Title;
+            existingComment.Content = commentDto.Content;
+
+            await _context.SaveChangesAsync();
+
+            return existingComment;
         }
 
     }
