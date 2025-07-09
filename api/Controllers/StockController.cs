@@ -1,5 +1,6 @@
 ﻿using api.Data;
 using api.Dtos.Stock;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllAsync(query);
             var stockDtos = stocks.Select(stock => stock.ToDto()).ToList();
 
             if (stockDtos == null || !stockDtos.Any())
@@ -32,7 +33,7 @@ namespace api.Controllers
             return Ok(stockDtos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var stock = await _stockRepo.GetByIdAsync(id);
@@ -54,7 +55,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { Id = stock.Id }, stock.ToDto());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] StockUpdateDto stockUpdateDto)
         {
             var stock = await _stockRepo.UpdateAsync(id, stockUpdateDto);
@@ -68,7 +69,7 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         //[ProducesResponseType(StatusCodes.Status204NoContent)]
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete([FromRoute] int id)
