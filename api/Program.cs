@@ -2,10 +2,10 @@ using api.Data;
 using api.Interfaces;
 using api.Models;
 using api.Repository;
+using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +25,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 // DI 
 builder.Services.AddScoped<IStockRepo, StockRepo>();
 builder.Services.AddScoped<ICommentRepo, CommentRepo>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Configure Entity Framework Core with SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -59,7 +60,7 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-    //    ValidateLifetime = true,
+        //    ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
