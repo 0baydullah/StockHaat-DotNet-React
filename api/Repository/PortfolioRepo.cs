@@ -22,6 +22,22 @@ namespace api.Repository
             return portfolio;
         }
 
+        public async Task<Portfolio> DeletePortfolio(AppUser user, string symbol)
+        {
+            var portfolio = await _context.Portfolios
+                .FirstOrDefaultAsync(p => p.AppUserId == user.Id && p.Stock.Symbol.ToLower() == symbol.ToLower());
+
+            if (portfolio == null)
+            {
+                return null;
+            }
+
+            _context.Portfolios.Remove(portfolio);
+            _context.SaveChanges();
+
+            return portfolio;
+        }
+
         public async Task<List<Stock>> GetUserPortfolio(AppUser user)
         {
             return await _context.Portfolios.Where(u => u.AppUserId == user.Id)
