@@ -21,10 +21,17 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var comments = await _commentRepo.GetAllAsync();
-            var commentDtos = comments.Select(c => c.ToCommnetDto()).ToList();
+            try
+            {
+                var comments = await _commentRepo.GetAllAsync();
+                var commentDtos = comments.Select(c => c.ToCommnetDto()).ToList();
 
-            return Ok(commentDtos);
+                return Ok(commentDtos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving comments: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
